@@ -1,0 +1,28 @@
+
+.onboard h1 {
+  margin-top: 50%;
+  text-align: center;
+  font-size: 20px; }
+
+.onboard #userid {
+  text-align: center;
+  margin-top: 15%;
+  margin-bottom: 15%;
+  font-size: 26px;
+  font-weight: 200; }
+
+.swiper-pagination-bullet-active {
+  background: #1C56FF; }
+
+.swiper-pagination {
+  display: none; }
+
+#nextbtn {
+  bottom: 0;
+  position: absolute;
+  margin: 0;
+  border-radius: 0;
+  z-index: 100;
+  /*i::before {
+        font-size:40px;
+    }*/ }

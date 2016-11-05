@@ -1,0 +1,9 @@
+node_modules/
+platforms/
+plugins/
+bower_components/
+todo/
+build/*
+
+
+.DS_Store

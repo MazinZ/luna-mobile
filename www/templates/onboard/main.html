@@ -1,0 +1,149 @@
+<!--<div class = "onboard">
+    <ion-content scroll="false">
+    <ion-slides  options="options" slider="data.slider">
+        <ion-slide-page>
+            <div class="box onboard">
+                <h1>What is your birthday?</h1>
+                <ion-item>
+                    <ion-label>Date</ion-label>
+                    <ion-datetime displayFormat="MMMM YYYY" min="2016" max="2020-10-31" [(ngModel)]="birthday">
+                    </ion-datetime>
+                </ion-item>
+            </div>
+        </ion-slide-page>
+        <ion-slide-page>
+            <div class="box onboard">
+                <h1>Menstrual cycle length</h1>
+            </div>
+        </ion-slide-page>
+        <ion-slide-page>
+            <div class="box onboard">
+                <h1>Do you use a hormonal contraceptive?</h1>
+            </div>
+        </ion-slide-page>
+        <ion-slide-page>
+            <div class="box onboard">
+                <h1>Do you have known reproductive disorders?</h1>
+            </div>
+        </ion-slide-page>
+        <ion-slide-page>
+            <div class="box onboard">
+                <h1>What is your relationship status?</h1>
+            </div>
+        </ion-slide-page>
+    </ion-slides>
+    </ion-content>
+</div>-->
+<div class = "onboard">
+    <ion-content scroll="false">
+    <ion-slides  options="options" slider="data.slider" delegate-handle="onboardslide">
+        <ion-slide-page>
+            <div class="list">
+                <h2 id="userid"> 1eEr-u93J </h2>
+                <div class="item item-divider">
+                    Basic Information
+                </div>
+                <label class="item item-input item-stacked-label">
+                    <span class="input-label">Date of Birth</span>
+                    <input type="date" placeholder="MM/DD/YYY">
+                </label>
+                <div class="item item-divider">
+                    Relationship Status
+                </div>
+                <a class="item" href="#">
+                    Single
+                </a>
+                <a class="item" href="#">
+                    Casually Dating
+                </a>
+                <a class="item" href="#">
+                    Committed Relationship
+                </a>
+            </div>
+        </ion-slide-page>
+        <ion-slide-page>
+
+             <ion-list>
+
+                <!--<ion-item>
+                    <ion-label>The pill</ion-label>
+                    <ion-checkbox [(ngModel)]="pepperoni"></ion-checkbox>
+                </ion-item>
+                <ion-item>
+                    <ion-label>Male condom</ion-label>
+                    <ion-checkbox [(ngModel)]="pepperoni"></ion-checkbox>
+                </ion-item>
+                <ion-item>
+                    <ion-label>Female condom</ion-label>
+                    <ion-checkbox [(ngModel)]="pepperoni"></ion-checkbox>
+                </ion-item>
+                <ion-item>
+                    <ion-label>Diaphragm</ion-label>
+                    <ion-checkbox [(ngModel)]="pepperoni"></ion-checkbox>
+                </ion-item>
+                <ion-item>
+                    <ion-label>Cervical cap</ion-label>
+                    <ion-checkbox [(ngModel)]="pepperoni"></ion-checkbox>
+                </ion-item>
+                <ion-item>
+                    <ion-label>IUD (Intrauterine Device)</ion-label>
+                    <ion-checkbox [(ngModel)]="pepperoni"></ion-checkbox>
+                </ion-item>
+                <ion-item>
+                    <ion-label>IUD: Copper-based/ion-label>
+                    <ion-checkbox [(ngModel)]="pepperoni"></ion-checkbox>
+                </ion-item>
+                <ion-item>
+                    <ion-label>Contraceptive Implant</ion-label>
+                    <ion-checkbox [(ngModel)]="pepperoni"></ion-checkbox>
+                </ion-item>
+                <ion-item>
+                    <ion-label>Contraceptive sponge</ion-label>
+                    <ion-checkbox [(ngModel)]="pepperoni"></ion-checkbox>
+                </ion-item>
+                <ion-item>
+                    <ion-label>Spermicide (alone)</ion-label>
+                    <ion-checkbox [(ngModel)]="pepperoni"></ion-checkbox>
+                </ion-item>
+                <ion-item>
+                    <ion-label>Contraceptive injections</ion-label>
+                    <ion-checkbox [(ngModel)]="pepperoni"></ion-checkbox>
+                </ion-item>
+                <ion-item>
+                    <ion-label>Vaginal ring</ion-label>
+                    <ion-checkbox [(ngModel)]="pepperoni"></ion-checkbox>
+                </ion-item>
+                <ion-item>
+                    <ion-label>The patch</ion-label>
+                    <ion-checkbox [(ngModel)]="pepperoni"></ion-checkbox>
+                </ion-item>-->
+            </ion-list>
+
+        </ion-slide-page>
+        <ion-slide-page>
+                <div class="item item-divider">
+                    Do you have any reproductive disorders?
+                </div>
+                <a class="item" href="#">
+                    Yes
+                </a>
+                <a class="item" href="#">
+                    No
+                </a>
+                <div class="item item-divider">
+                    First day of your last period
+                </div>
+                <label class="item item-input item-stacked-label">
+                    <input type="date" placeholder="MM/DD/YYY">
+                </label>
+        </ion-slide-page>
+
+
+    </ion-slides>
+    <button id="nextbtn" ng-click="nextSlide()" class="button button-block button-positive"> 
+        <i ng-if="inprogress" class="ion-ios-arrow-thin-right"></i> 
+        <div ng-if="finished">Submit</div> 
+    </button>
+
+    </ion-content>
+</div>
