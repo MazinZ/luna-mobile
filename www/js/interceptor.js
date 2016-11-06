@@ -2,7 +2,7 @@ angular.module(app_name)
 .factory("authInterceptor", ['$q', '$window', function ($q, $window) {
   return {
    'request': function(config) {
-        if ($window.localStorage.token) config.headers['Authorization'] = 'Token ' + $window.localStorage.token;
+        if (localStorage.token) config.headers['Authorization'] = 'Token ' + localStorage.token;
         return config;
     },
 

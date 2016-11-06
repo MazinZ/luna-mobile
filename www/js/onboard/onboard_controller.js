@@ -1,11 +1,19 @@
 angular.module(app_name)
-  .controller('OnboardController', ['$scope', '$ionicSlideBoxDelegate', '$timeout', 'firebase_service', 
-    function($scope, $ionicSlideBoxDelegate, $timeout, firebase_serivce){
+  .controller('OnboardController', ['$scope', '$ionicSlideBoxDelegate', '$timeout', 'user_service', 
+    function($scope, $ionicSlideBoxDelegate, $timeout, user_service){
     
-    var user = {
-        "test" : 1
+    function init(user){
+      $timeout(function() {
+        $scope.uid = user.username;
+      }); 
     }
 
+    $scope.$on('USER_SET', function(event, user){
+      console.log(user);
+      init(user);
+    });
+
+    /*                Slider stuff                    */
     $scope.options = {
         onlyExternal: true // Disable user swiping
     }
@@ -38,11 +46,20 @@ angular.module(app_name)
         $scope.slider.slideNext();
         }
       else{
-        firebase_serivce.register(user);
+        console.log($scope.userinfo);
+        //firebase_serivce.register(user);
        }
 
     }
     $scope.previousSlide = function(){
       $scope.slider.slidePrevious();
     }
+
+    /*             End slider stuff                 */
+
+    $scope.userinfo = {};
+
+    // Relationship status.
+    $scope.userinfo.relationship = -1;
+
 }]);

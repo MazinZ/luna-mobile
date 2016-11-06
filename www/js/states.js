@@ -21,7 +21,7 @@ angular.module(app_name)
         }
       }
     })
-    .state('main', {
+    .state('main_onboard', {
       url: '/main_onboard',
       views: {
         'content@': {

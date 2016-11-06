@@ -47,7 +47,7 @@ angular.module(app_name)
 .factory("authInterceptor", ['$q', '$window', function ($q, $window) {
   return {
    'request': function(config) {
-        if ($window.localStorage.token) config.headers['Authorization'] = 'Token ' + $window.localStorage.token;
+        if (localStorage.token) config.headers['Authorization'] = 'Token ' + localStorage.token;
         return config;
     },
 
@@ -63,6 +63,20 @@ angular.module(app_name)
   $httpProvider.interceptors.push('authInterceptor');
 });
 
+angular.module(app_name)
+    .run(['$http', '$window', '$rootScope', function($http, $window, $rootScope){
+        /*$http.defaults.xsrfHeaderName = 'X-CSRFToken';
+        $http.defaults.xsrfCookieName = 'csrftoken';
+        $http.defaults.headers["Content-Type"] = "application/json";*/
+
+        $rootScope.$on('USER_LOGGED_IN', function(event, token) {
+           /* if (localStorage.token) {
+                console.log("TOKEN");
+                $http.defaults.headers.common['Authorization'] = 'Token ' + token;
+            }*/
+        });
+    }]);
+    
 
 angular.module(app_name)
   .config(['$stateProvider', '$urlRouterProvider', 
@@ -86,7 +100,7 @@ angular.module(app_name)
         }
       }
     })
-    .state('main', {
+    .state('main_onboard', {
       url: '/main_onboard',
       views: {
         'content@': {
@@ -116,13 +130,21 @@ angular.module(app_name)
 }]);
 
 angular.module(app_name)
-  .controller('OnboardController', ['$scope', '$ionicSlideBoxDelegate', '$timeout', 'firebase_service', 
-    function($scope, $ionicSlideBoxDelegate, $timeout, firebase_serivce){
+  .controller('OnboardController', ['$scope', '$ionicSlideBoxDelegate', '$timeout', 'user_service', 
+    function($scope, $ionicSlideBoxDelegate, $timeout, user_service){
     
-    var user = {
-        "test" : 1
+    function init(user){
+      $timeout(function() {
+        $scope.uid = user.username;
+      }); 
     }
 
+    $scope.$on('USER_SET', function(event, user){
+      console.log(user);
+      init(user);
+    });
+
+    /*                Slider stuff                    */
     $scope.options = {
         onlyExternal: true // Disable user swiping
     }
@@ -155,38 +177,52 @@ angular.module(app_name)
         $scope.slider.slideNext();
         }
       else{
-        firebase_serivce.register(user);
+        console.log($scope.userinfo);
+        //firebase_serivce.register(user);
        }
 
     }
     $scope.previousSlide = function(){
       $scope.slider.slidePrevious();
     }
+
+    /*             End slider stuff                 */
+
+    $scope.userinfo = {};
+
+    // Relationship status.
+    $scope.userinfo.relationship = -1;
+
 }]);
-angular.module(app_name).controller('LoginController', ['user_service', '$scope', function(user_service, $scope){
+angular.module(app_name).controller('LoginController', ['user_service', '$scope', '$state', '$ionicLoading' ,
+    function(user_service, $scope, $state, $ionicLoading){
     
      // TODO: Check if user is
      // 1. Signed in and completed onboarding.
      // 2. Signed in but has not completed onboarding.
-    if (user_service.is_signed_in()) {
-        $location.url('/');
-      }
+    $scope.user = {"username": '', "password": '' }
 
+    if (user_service.is_signed_in()) {
+        $state.go('main_onboard');
+      }
     $scope.sign_in = function() {
       user_service.sign_in({
-          "uid" : $scope.uid, 
-          "password" : $scope.password
-        });
+          "username" : $scope.user.username, 
+          "password" : $scope.user.password
+        })
     }
 
 }]);
 
-angular.module(app_name).service('user_service', ['$http', '$q', '$state', function($http, $q, $state){
+angular.module(app_name).service('user_service', ['$http', '$q', '$state', '$rootScope', '$ionicLoading', 
+    function($http, $q, $state, $rootScope, $ionicLoading){
     var self = this;
     var base = 'https://luna-track.com/api/v1/auth';
 
     self.sign_in = function(user){
         console.log(user);
+        $ionicLoading.show({templateUrl:'/templates/common/loader.html'});
+
         $http({
             method: 'POST',
             url: base + '/login/',
@@ -194,34 +230,35 @@ angular.module(app_name).service('user_service', ['$http', '$q', '$state', funct
         })
         .then(function(data){
             $rootScope.$broadcast("USER_LOGGED_IN");
-            set_user(data.data.auth_token);
-            $state.go('/main_onboard');
+            set_user(data.data.auth_token.auth_token, 
+                data.data.firebase_token.firebasetoken);
+            console.log(data.data);
+            $state.go('main_onboard');
         });
     };    
 
-    function set_user(token) {
+    function set_user(token, ftoken) {
         localStorage.token = token;
-        // This is to retrieve user data by token upon login
-        /*get_current_user().then(function(data){
-            console.log(data);
+        localStorage.ftoken = ftoken;
+        get_current_user().then(function(data){
             $rootScope.$broadcast("USER_SET", data);
-        });*/ 
+            $ionicLoading.hide();
+        });
     }
 
     function get_current_user() {
         return $q(function(resolve, reject) {
 
         if (is_signed_in()) {
-
             $http({
                 method: 'GET',
-                url: '/api/v1/auth/me/',
+                url: base + '/me/',
             }).then(function(data){
+                console.log(data.data);
                 resolve(data.data);
             }, function(error){
-                console.log(error);
-                console.log("CURR_ERROR");
                 reject(error);
+                console.log(error);
             });
 
         }
@@ -234,5 +271,5 @@ angular.module(app_name).service('user_service', ['$http', '$q', '$state', funct
     }
 
     self.is_signed_in = is_signed_in;
-
+    self.get_current_user = get_current_user;
 }]);

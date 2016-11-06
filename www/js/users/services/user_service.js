@@ -1,9 +1,12 @@
-angular.module(app_name).service('user_service', ['$http', '$q', '$state', function($http, $q, $state){
+angular.module(app_name).service('user_service', ['$http', '$q', '$state', '$rootScope', '$ionicLoading', 
+    function($http, $q, $state, $rootScope, $ionicLoading){
     var self = this;
     var base = 'https://luna-track.com/api/v1/auth';
 
     self.sign_in = function(user){
         console.log(user);
+        $ionicLoading.show({templateUrl:'/templates/common/loader.html'});
+
         $http({
             method: 'POST',
             url: base + '/login/',
@@ -11,34 +14,35 @@ angular.module(app_name).service('user_service', ['$http', '$q', '$state', funct
         })
         .then(function(data){
             $rootScope.$broadcast("USER_LOGGED_IN");
-            set_user(data.data.auth_token);
-            $state.go('/main_onboard');
+            set_user(data.data.auth_token.auth_token, 
+                data.data.firebase_token.firebasetoken);
+            console.log(data.data);
+            $state.go('main_onboard');
         });
     };    
 
-    function set_user(token) {
+    function set_user(token, ftoken) {
         localStorage.token = token;
-        // This is to retrieve user data by token upon login
-        /*get_current_user().then(function(data){
-            console.log(data);
+        localStorage.ftoken = ftoken;
+        get_current_user().then(function(data){
             $rootScope.$broadcast("USER_SET", data);
-        });*/ 
+            $ionicLoading.hide();
+        });
     }
 
     function get_current_user() {
         return $q(function(resolve, reject) {
 
         if (is_signed_in()) {
-
             $http({
                 method: 'GET',
-                url: '/api/v1/auth/me/',
+                url: base + '/me/',
             }).then(function(data){
+                console.log(data.data);
                 resolve(data.data);
             }, function(error){
-                console.log(error);
-                console.log("CURR_ERROR");
                 reject(error);
+                console.log(error);
             });
 
         }
@@ -51,5 +55,5 @@ angular.module(app_name).service('user_service', ['$http', '$q', '$state', funct
     }
 
     self.is_signed_in = is_signed_in;
-
+    self.get_current_user = get_current_user;
 }]);

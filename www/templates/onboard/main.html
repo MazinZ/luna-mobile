@@ -39,24 +39,24 @@
     <ion-slides  options="options" slider="data.slider" delegate-handle="onboardslide">
         <ion-slide-page>
             <div class="list">
-                <h2 id="userid"> 1eEr-u93J </h2>
+                <h2 ng-if="uid" id="userid"> {{uid}} </h2>
                 <div class="item item-divider">
                     Basic Information
                 </div>
                 <label class="item item-input item-stacked-label">
                     <span class="input-label">Date of Birth</span>
-                    <input type="date" placeholder="MM/DD/YYY">
+                    <input type="date" placeholder="MM/DD/YYY" ng-model="userinfo.birthday">
                 </label>
                 <div class="item item-divider">
                     Relationship Status
                 </div>
-                <a class="item" href="#">
+                <a class="item" ng-class="{active : userinfo.relationship === 0}" ng-click="userinfo.relationship = 0">
                     Single
                 </a>
-                <a class="item" href="#">
+                <a class="item" ng-class="{active : userinfo.relationship === 1}" ng-click="userinfo.relationship = 1">
                     Casually Dating
                 </a>
-                <a class="item" href="#">
+                <a class="item" ng-class="{active : userinfo.relationship === 2}" ng-click="userinfo.relationship = 2">
                     Committed Relationship
                 </a>
             </div>
@@ -124,17 +124,25 @@
                 <div class="item item-divider">
                     Do you have any reproductive disorders?
                 </div>
-                <a class="item" href="#">
-                    Yes
-                </a>
-                <a class="item" href="#">
+                <a class="item" ng-class="{active : userinfo.disorder === 0}" ng-click="userinfo.disorder = 0">
                     No
                 </a>
+                <a class="item" ng-class="{active : userinfo.disorder === 1}" ng-click="userinfo.disorder = 1">
+                    Yes
+                </a>
+                <!-- If they indicate they have a reproductive disorder, prompt for the name -->
+                <div ng-if="userinfo.disorder === 1">
+                    <label class="item item-input item-stacked-label">
+                        <span class="input-label">Name of reproductive disorder</span>
+                        <input type="text" class="form-control" ng-model="userinfo.disorderName" />
+                    </label>
+                </div>
+
                 <div class="item item-divider">
                     First day of your last period
                 </div>
                 <label class="item item-input item-stacked-label">
-                    <input type="date" placeholder="MM/DD/YYY">
+                    <input type="date" placeholder="MM/DD/YYY" ng-model="userinfo.lastperiod">
                 </label>
         </ion-slide-page>
 

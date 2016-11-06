@@ -2,15 +2,15 @@
     <ion-content scroll="false" >
 
         <div class="list">
-            <form role="form" ng-submit="sign_in()">
+            <form role="form" ng-submit="sign_in()" >
             <div ng-show="error" ng-bind="error"></div>
             <label class="item item-input item-stacked-label">
                 <span class="input-label">Participant ID</span>
-                <input type="text" placeholder="####-####" class="form-control" name="uid" ng-model="uid"  />
+                <input type="text" placeholder="####-####" class="form-control" ng-model="user.username"  />
             </label>
             <label class="item item-input item-stacked-label">
                 <span class="input-label">Password</span>
-                <input type="password" placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;" class="form-control" name="password" ng-model="password" />
+                <input type="password" placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;" class="form-control" ng-model="user.password" />
             </label>
             <button class="button button-block button-positive" type="submit"> Sign In </button>
             </form>
