@@ -124,7 +124,7 @@
                 <div class="item item-divider">
                     Do you have any reproductive disorders?
                 </div>
-                <a class="item" ng-class="{active : userinfo.disorder === 0}" ng-click="userinfo.disorder = 0">
+                <a class="item" ng-class="{active : userinfo.disorder === 0}" ng-click="userinfo.disorder = 0; userinfo.disorderName = null">
                     No
                 </a>
                 <a class="item" ng-class="{active : userinfo.disorder === 1}" ng-click="userinfo.disorder = 1">

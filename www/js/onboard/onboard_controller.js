@@ -1,6 +1,6 @@
 angular.module(app_name)
-  .controller('OnboardController', ['$scope', '$ionicSlideBoxDelegate', '$timeout', 'user_service', 
-    function($scope, $ionicSlideBoxDelegate, $timeout, user_service){
+  .controller('OnboardController', ['$scope', '$ionicSlideBoxDelegate', '$timeout', 'user_service', 'firebase_service',
+    function($scope, $ionicSlideBoxDelegate, $timeout, user_service, firebase_service){
     
     function init(user){
       $timeout(function() {
@@ -32,8 +32,10 @@ angular.module(app_name)
       $scope.activeIndex = data.slider.activeIndex;
       $scope.previousIndex = data.slider.previousIndex;
         if ($scope.activeIndex >= 2) {
-            $scope.inprogress = false;
-            $scope.finished = true;
+            $timeout(function(){
+              $scope.inprogress = false;
+              $scope.finished = true;
+            });
         }
         else {
             $scope.inprogress = true;
@@ -47,7 +49,7 @@ angular.module(app_name)
         }
       else{
         console.log($scope.userinfo);
-        //firebase_serivce.register(user);
+        firebase_service.onboard($scope.userinfo);
        }
 
     }

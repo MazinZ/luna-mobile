@@ -21,6 +21,15 @@ angular.module(app_name)
         }
       }
     })
+    .state('landing', {
+      url: '/landing',
+      views: {
+        'content@': {
+          templateUrl: '/templates/users/landing.html',
+          //controller: 'LandingController'
+        }
+      }
+    })
     .state('main_onboard', {
       url: '/main_onboard',
       views: {

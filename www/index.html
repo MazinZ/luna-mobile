@@ -19,6 +19,7 @@
     <link href="lib/ionic/css/ionic.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
     <link href="build/main.css" rel="stylesheet">
+    <link rel="stylesheet" href="lib/ionic-calendar/dist/css/calendar.min.css"/>
 
     <!-- IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
     <link href="css/ionic.app.css" rel="stylesheet">
@@ -51,5 +52,19 @@
             <div ui-view="content"></div>
       <!--</ion-content>-->
     <!--</ion-pane>-->
+
+    <script src="https://www.gstatic.com/firebasejs/3.5.3/firebase.js"></script>
+    <script>
+      // Initialize Firebase
+      var config = {
+        apiKey: "AIzaSyAJEJ5V2O2uv6cbdE61a-tCeUWRNmIJH6c",
+        authDomain: "luna-c2c2f.firebaseapp.com",
+        databaseURL: "https://luna-c2c2f.firebaseio.com",
+        storageBucket: "luna-c2c2f.appspot.com",
+        messagingSenderId: "1070742680504"
+      };
+      firebase.initializeApp(config);
+    </script>
+    <script src="lib/ionic-calendar/dist/js/calendar-tpls.min.js"></script>
   </body>
 </html>

@@ -1,11 +1,11 @@
-angular.module(app_name).service('user_service', ['$http', '$q', '$state', '$rootScope', '$ionicLoading', 
-    function($http, $q, $state, $rootScope, $ionicLoading){
+angular.module(app_name).service('user_service', ['$http', '$q', '$state', '$rootScope', '$ionicLoading', 'firebase_service',
+    function($http, $q, $state, $rootScope, $ionicLoading, firebase_service){
     var self = this;
     var base = 'https://luna-track.com/api/v1/auth';
 
     self.sign_in = function(user){
         console.log(user);
-        $ionicLoading.show({templateUrl:'/templates/common/loader.html'});
+        $ionicLoading.show();
 
         $http({
             method: 'POST',
@@ -18,6 +18,8 @@ angular.module(app_name).service('user_service', ['$http', '$q', '$state', '$roo
                 data.data.firebase_token.firebasetoken);
             console.log(data.data);
             $state.go('main_onboard');
+        }, function(data){
+            $ionicLoading.hide(); // Hide loader on failed login.
         });
     };    
 
@@ -28,6 +30,7 @@ angular.module(app_name).service('user_service', ['$http', '$q', '$state', '$roo
             $rootScope.$broadcast("USER_SET", data);
             $ionicLoading.hide();
         });
+        firebase_service.login_firebase(ftoken);
     }
 
     function get_current_user() {

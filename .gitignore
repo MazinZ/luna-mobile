@@ -4,6 +4,6 @@ plugins/
 bower_components/
 todo/
 build/*
-
+lib/
 
 .DS_Store

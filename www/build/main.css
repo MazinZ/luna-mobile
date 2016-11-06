@@ -22,7 +22,7 @@
   position: absolute;
   margin: 0;
   border-radius: 0;
-  z-index: 100;
+  z-index: 11;
   /*i::before {
         font-size:40px;
     }*/ }

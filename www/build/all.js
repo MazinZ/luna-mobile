@@ -4,7 +4,7 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 var app_name = "luna-ionic";
-angular.module(app_name, ['ionic','angular-loading-bar', 'ui.router','ngAnimate'])
+angular.module(app_name, ['ionic','angular-loading-bar', 'ui.router','ngAnimate','ui.rCalendar'])
 
 
 .run(function($ionicPlatform) {
@@ -24,24 +24,6 @@ angular.module(app_name, ['ionic','angular-loading-bar', 'ui.router','ngAnimate'
     }
   });
 });
-
-angular.module(app_name)
-  .service('firebase_service', ['$http', function($http){
-    var self = this;
-
-    self.register = function(user){
-      $http({
-         method: 'POST',
-         url: 'https://luna-c2c2f.firebaseio.com/Users.json'
-        })
-        .then(function(data){
-            console.log("worked")
-        }, function(data){
-            console.log(data);
-        });
-    }
-
-}]);
 
 angular.module(app_name)
 .factory("authInterceptor", ['$q', '$window', function ($q, $window) {
@@ -100,6 +82,15 @@ angular.module(app_name)
         }
       }
     })
+    .state('landing', {
+      url: '/landing',
+      views: {
+        'content@': {
+          templateUrl: '/templates/users/landing.html',
+          //controller: 'LandingController'
+        }
+      }
+    })
     .state('main_onboard', {
       url: '/main_onboard',
       views: {
@@ -130,8 +121,8 @@ angular.module(app_name)
 }]);
 
 angular.module(app_name)
-  .controller('OnboardController', ['$scope', '$ionicSlideBoxDelegate', '$timeout', 'user_service', 
-    function($scope, $ionicSlideBoxDelegate, $timeout, user_service){
+  .controller('OnboardController', ['$scope', '$ionicSlideBoxDelegate', '$timeout', 'user_service', 'firebase_service',
+    function($scope, $ionicSlideBoxDelegate, $timeout, user_service, firebase_service){
     
     function init(user){
       $timeout(function() {
@@ -163,8 +154,10 @@ angular.module(app_name)
       $scope.activeIndex = data.slider.activeIndex;
       $scope.previousIndex = data.slider.previousIndex;
         if ($scope.activeIndex >= 2) {
-            $scope.inprogress = false;
-            $scope.finished = true;
+            $timeout(function(){
+              $scope.inprogress = false;
+              $scope.finished = true;
+            });
         }
         else {
             $scope.inprogress = true;
@@ -178,7 +171,7 @@ angular.module(app_name)
         }
       else{
         console.log($scope.userinfo);
-        //firebase_serivce.register(user);
+        firebase_service.onboard($scope.userinfo);
        }
 
     }
@@ -214,14 +207,39 @@ angular.module(app_name).controller('LoginController', ['user_service', '$scope'
 
 }]);
 
-angular.module(app_name).service('user_service', ['$http', '$q', '$state', '$rootScope', '$ionicLoading', 
-    function($http, $q, $state, $rootScope, $ionicLoading){
+
+angular.module(app_name)
+  .service('firebase_service', ['$http', '$state', function($http, $state){
+    var self = this;
+
+    self.login_firebase = function(token){
+        firebase.auth().signInWithCustomToken(token).catch(function(error) {
+            console.log(error)
+        });
+    }
+
+    self.onboard = function(userinfo){
+        var user = firebase.auth().currentUser;
+        // If user is currently signed into firebase
+        if (user){
+            user.updateProfile(userinfo)
+              .then(function(){
+                 $state.go('landing');
+            });
+        }
+        else return;
+    }
+
+}]);
+
+angular.module(app_name).service('user_service', ['$http', '$q', '$state', '$rootScope', '$ionicLoading', 'firebase_service',
+    function($http, $q, $state, $rootScope, $ionicLoading, firebase_service){
     var self = this;
     var base = 'https://luna-track.com/api/v1/auth';
 
     self.sign_in = function(user){
         console.log(user);
-        $ionicLoading.show({templateUrl:'/templates/common/loader.html'});
+        $ionicLoading.show();
 
         $http({
             method: 'POST',
@@ -234,6 +252,8 @@ angular.module(app_name).service('user_service', ['$http', '$q', '$state', '$roo
                 data.data.firebase_token.firebasetoken);
             console.log(data.data);
             $state.go('main_onboard');
+        }, function(data){
+            $ionicLoading.hide(); // Hide loader on failed login.
         });
     };    
 
@@ -244,6 +264,7 @@ angular.module(app_name).service('user_service', ['$http', '$q', '$state', '$roo
             $rootScope.$broadcast("USER_SET", data);
             $ionicLoading.hide();
         });
+        firebase_service.login_firebase(ftoken);
     }
 
     function get_current_user() {
