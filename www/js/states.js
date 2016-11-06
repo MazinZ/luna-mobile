@@ -16,7 +16,7 @@ angular.module(app_name)
       url: '/',
       views: {
         'content@': {
-          templateUrl: '/templates/users/login.html',
+          templateUrl: 'templates/users/login.html',
           controller: 'LoginController'
         }
       }
@@ -25,7 +25,7 @@ angular.module(app_name)
       url: '/landing',
       views: {
         'content@': {
-          templateUrl: '/templates/users/landing.html',
+          templateUrl: 'templates/users/landing.html',
           //controller: 'LandingController'
         }
       }
@@ -34,7 +34,7 @@ angular.module(app_name)
       url: '/main_onboard',
       views: {
         'content@': {
-          templateUrl: '/templates/onboard/main.html',
+          templateUrl: 'templates/onboard/main.html',
           controller: 'OnboardController'
         }
       }
@@ -43,17 +43,17 @@ angular.module(app_name)
         url: '/onboard',
         views: {
           'content@': {
-          template: '/templates/onboard/onboard.html',
+          template: 'templates/onboard/onboard.html',
         }
       }
     })
     .state('onboard.register', {
         url: '/asdf',
-        templateUrl: '/templates/onboard/register.html',
+        templateUrl: 'templates/onboard/register.html',
     })
     .state('onboard.confirm', {
         url: '/asdf',
-        templateUrl: '/templates/onboard/confirm.html'
+        templateUrl: 'templates/onboard/confirm.html'
     })
     ;
 
