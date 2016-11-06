@@ -1,12 +1,12 @@
 
 angular.module(app_name)
   .config(['$stateProvider', '$urlRouterProvider', 
-        function($stateProvider, $urlRouterProvider) {
+        function($stateProvider) {
         
   
   var content = 'ion-content@';
  
-  $urlRouterProvider.otherwise('/');
+  //$urlRouterProvider.otherwise('/');
   $stateProvider
 
    /* .state('form', {
